@@ -21,6 +21,40 @@ type Section =
   | "logistics"
   | "contact";
 
+const studentProjects = [
+  {
+    id: "proj1",
+    title: "GreenNanoCure",
+    subtitle:
+      "Harnessing Oxidized Nano-Cellulose for advanced Medicated Bandages",
+    image: "/assets/uploads/Student-project-1-4.png",
+    bg: "#4dabf7",
+  },
+  {
+    id: "proj2",
+    title: "SANISAFE",
+    subtitle:
+      "Noval Technological Solutions for safe disposal of Menstrual waste",
+    image: "/assets/uploads/Student-project-2-5.png",
+    bg: "#20c997",
+  },
+  {
+    id: "proj3",
+    title: "ALFA",
+    subtitle: "DEVELOPMENT OF READY TO USE FIRST AID KIT",
+    image: "/assets/uploads/Student-project-3-2.png",
+    bg: "#9775fa",
+  },
+  {
+    id: "proj4",
+    title: "BIOPLASTIC",
+    subtitle:
+      "Preparation of Biodegradable Polymeric for Bio-Medical Application",
+    image: "/assets/uploads/Student-project-4-3.png",
+    bg: "#fd7e14",
+  },
+];
+
 const serviceTools = [
   {
     id: "ftir",
@@ -103,6 +137,9 @@ export default function App() {
   const [activeSection, setActiveSection] = useState<Section>("home");
   const [contactOpen, setContactOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<
+    (typeof studentProjects)[0] | null
+  >(null);
 
   const handleNav = (id: Section) => {
     if (id === "contact") {
@@ -124,7 +161,6 @@ export default function App() {
         className="text-white px-4 py-3 shadow-md"
       >
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
-          {/* Left Logo */}
           <div className="flex items-center gap-3 flex-shrink-0">
             <img
               src="/assets/generated/logo-bio.dim_300x300.png"
@@ -150,8 +186,6 @@ export default function App() {
               </p>
             </div>
           </div>
-
-          {/* Right Logo */}
           <div className="flex-shrink-0">
             <img
               src="/assets/uploads/mitbio_logo.png-1.png"
@@ -171,7 +205,6 @@ export default function App() {
       {/* Navigation Bar */}
       <nav style={{ background: "#1971c2" }} className="shadow-sm">
         <div className="max-w-5xl mx-auto">
-          {/* Desktop nav */}
           <div className="hidden md:flex items-center overflow-x-auto">
             {navItems.map((item) => (
               <button
@@ -189,8 +222,6 @@ export default function App() {
               </button>
             ))}
           </div>
-
-          {/* Mobile nav toggle */}
           <div className="md:hidden flex items-center justify-between px-4 py-2">
             <span className="text-blue-100 text-sm font-medium">
               {activeSection === "home"
@@ -233,7 +264,7 @@ export default function App() {
       {/* Main Content */}
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 py-6">
         <AnimatePresence mode="wait">
-          {/* Home / default view */}
+          {/* Home */}
           {activeSection === "home" && (
             <motion.div
               key="home"
@@ -308,7 +339,7 @@ export default function App() {
               >
                 About
               </h2>
-              <div className="bg-white rounded-2xl p-6 shadow-md text-gray-700 text-sm leading-relaxed">
+              <div className="bg-white rounded-2xl p-6 shadow-md text-gray-700 text-sm leading-relaxed mb-5">
                 <p>
                   The Nanobiotech Lab at MIT-ADT University is a cutting-edge
                   research facility focused on nanobiotechnology,
@@ -321,6 +352,42 @@ export default function App() {
                   develop innovative solutions for healthcare, environmental
                   monitoring, and material science.
                 </p>
+              </div>
+
+              {/* Laboratory Details */}
+              <h3
+                style={{
+                  color: "#1971c2",
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
+                }}
+                className="text-base font-bold mb-3"
+              >
+                Laboratory Details
+              </h3>
+              <div className="bg-white rounded-2xl shadow-md overflow-hidden mb-5">
+                <img
+                  src="/assets/uploads/Laboratory-details-1.png"
+                  alt="Laboratory Details"
+                  style={{ width: "100%", display: "block" }}
+                />
+              </div>
+
+              {/* Coursework */}
+              <h3
+                style={{
+                  color: "#1971c2",
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
+                }}
+                className="text-base font-bold mb-3"
+              >
+                Course Work
+              </h3>
+              <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+                <img
+                  src="/assets/uploads/courcework-6.png"
+                  alt="Nanobiotechnology Course BT603"
+                  style={{ width: "100%", display: "block" }}
+                />
               </div>
             </motion.div>
           )}
@@ -339,15 +406,48 @@ export default function App() {
                   fontFamily: "'Bricolage Grotesque', sans-serif",
                   color: "#0b5ed7",
                 }}
-                className="text-xl font-bold mb-4"
+                className="text-xl font-bold mb-2"
               >
-                Projects
+                Student Projects
               </h2>
-              <div className="bg-white rounded-2xl p-6 shadow-md text-gray-700 text-sm leading-relaxed">
-                <p className="text-gray-500 italic">
-                  Project details will be added here. Please contact the lab to
-                  learn about ongoing and completed research projects.
-                </p>
+              <p className="text-gray-500 text-sm mb-5">
+                Click on a project to view details.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {studentProjects.map((proj, i) => (
+                  <motion.button
+                    key={proj.id}
+                    type="button"
+                    onClick={() => setSelectedProject(proj)}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.07 }}
+                    className="rounded-2xl overflow-hidden shadow-md text-left cursor-pointer border-0 p-0 bg-transparent"
+                  >
+                    <div style={{ background: proj.bg }} className="px-4 py-3">
+                      <p className="text-white font-bold text-sm leading-snug">
+                        {proj.title}
+                      </p>
+                      <p className="text-white/80 text-xs mt-1">
+                        {proj.subtitle}
+                      </p>
+                    </div>
+                    <div className="bg-white">
+                      <img
+                        src={proj.image}
+                        alt={proj.title}
+                        style={{
+                          width: "100%",
+                          maxHeight: 220,
+                          objectFit: "cover",
+                          display: "block",
+                        }}
+                      />
+                    </div>
+                  </motion.button>
+                ))}
               </div>
             </motion.div>
           )}
@@ -541,23 +641,21 @@ export default function App() {
                   className="flex items-center gap-2 font-bold text-white rounded-xl px-4 py-4 no-underline transition-opacity hover:opacity-90"
                   style={{ background: "#0b5ed7" }}
                 >
-                  <Phone size={18} />
-                  Call: 9284234954
+                  <Phone size={18} /> Call: 9284234954
                 </a>
                 <a
                   href="tel:9833691660"
                   className="flex items-center gap-2 font-bold text-white rounded-xl px-4 py-4 no-underline transition-opacity hover:opacity-90"
                   style={{ background: "#0b5ed7" }}
                 >
-                  <Phone size={18} />
-                  Call: 9833691660
+                  <Phone size={18} /> Call: 9833691660
                 </a>
                 <a
                   href="mailto:nanobiotechlabmitbio@gmail.com"
                   className="flex items-center gap-2 font-bold text-white rounded-xl px-4 py-4 no-underline transition-opacity hover:opacity-90 break-all"
                   style={{ background: "#20c997" }}
                 >
-                  <Mail size={18} className="shrink-0" />
+                  <Mail size={18} className="shrink-0" />{" "}
                   nanobiotechlabmitbio@gmail.com
                 </a>
                 <a
@@ -565,7 +663,7 @@ export default function App() {
                   className="flex items-center gap-2 font-bold text-white rounded-xl px-4 py-4 no-underline transition-opacity hover:opacity-90 break-all"
                   style={{ background: "#20c997" }}
                 >
-                  <Mail size={18} className="shrink-0" />
+                  <Mail size={18} className="shrink-0" />{" "}
                   pradip.ivare@mituniversity.edu.in
                 </a>
                 <a
@@ -573,9 +671,61 @@ export default function App() {
                   className="flex items-center gap-2 font-bold text-white rounded-xl px-4 py-4 no-underline transition-opacity hover:opacity-90 break-all"
                   style={{ background: "#20c997" }}
                 >
-                  <Mail size={18} className="shrink-0" />
+                  <Mail size={18} className="shrink-0" />{" "}
                   preetam.bala@mituniversity.edu.in
                 </a>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Project Image Popup */}
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            style={{ backgroundColor: "rgba(0,0,0,0.85)" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setSelectedProject(null);
+            }}
+          >
+            <motion.div
+              className="bg-white rounded-2xl overflow-hidden shadow-2xl w-full max-w-lg"
+              initial={{ scale: 0.85, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.85, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            >
+              <div
+                style={{ background: selectedProject.bg }}
+                className="px-5 py-4 flex justify-between items-start"
+              >
+                <div>
+                  <p className="text-white font-bold text-base leading-snug">
+                    {selectedProject.title}
+                  </p>
+                  <p className="text-white/80 text-xs mt-1">
+                    {selectedProject.subtitle}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedProject(null)}
+                  className="text-white/80 hover:text-white transition-colors ml-3 mt-0.5"
+                >
+                  <X size={22} />
+                </button>
+              </div>
+              <div style={{ maxHeight: "70vh", overflowY: "auto" }}>
+                <img
+                  src={selectedProject.image}
+                  alt={selectedProject.title}
+                  style={{ width: "100%", display: "block" }}
+                />
               </div>
             </motion.div>
           </motion.div>
