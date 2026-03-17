@@ -1,0 +1,76 @@
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("/assets/fonts/BricolageGrotesque.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Figtree";
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url("/assets/fonts/Figtree.woff2") format("woff2");
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 95 0.008 240;
+    --foreground: 20 0.02 250;
+    --card: 100 0 0;
+    --card-foreground: 20 0.02 250;
+    --popover: 100 0 0;
+    --popover-foreground: 20 0.02 250;
+    --primary: 52 0.22 258;
+    --primary-foreground: 100 0 0;
+    --secondary: 92 0.01 240;
+    --secondary-foreground: 20 0.02 250;
+    --muted: 92 0.01 240;
+    --muted-foreground: 55 0.015 250;
+    --accent: 80 0.08 250;
+    --accent-foreground: 20 0.02 250;
+    --destructive: 55 0.22 25;
+    --destructive-foreground: 100 0 0;
+    --border: 88 0.01 250;
+    --input: 88 0.01 250;
+    --ring: 52 0.22 258;
+    --radius: 0.75rem;
+    --chart-1: 52 0.22 258;
+    --chart-2: 70 0.16 180;
+    --chart-3: 65 0.2 150;
+    --chart-4: 72 0.18 30;
+    --chart-5: 60 0.22 295;
+    --sidebar: 95 0.008 240;
+    --sidebar-foreground: 20 0.02 250;
+    --sidebar-primary: 52 0.22 258;
+    --sidebar-primary-foreground: 100 0 0;
+    --sidebar-accent: 88 0.015 250;
+    --sidebar-accent-foreground: 20 0.02 250;
+    --sidebar-border: 88 0.01 250;
+    --sidebar-ring: 52 0.22 258;
+
+    /* Lab card colors */
+    --lab-chemical: 62 0.2 25;
+    --lab-ftir: 68 0.18 240;
+    --lab-contact-angle: 60 0.2 295;
+    --lab-lyo: 72 0.18 168;
+    --lab-sonicator: 65 0.2 50;
+    --lab-zeta: 65 0.18 165;
+    --lab-dark: 28 0.008 250;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Figtree", sans-serif;
+  }
+}
