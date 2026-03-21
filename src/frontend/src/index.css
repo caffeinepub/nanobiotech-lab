@@ -1,18 +1,4 @@
-@font-face {
-  font-family: "Bricolage Grotesque";
-  font-style: normal;
-  font-weight: 200 800;
-  font-display: swap;
-  src: url("/assets/fonts/BricolageGrotesque.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Figtree";
-  font-style: normal;
-  font-weight: 300 900;
-  font-display: swap;
-  src: url("/assets/fonts/Figtree.woff2") format("woff2");
-}
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -20,57 +6,96 @@
 
 @layer base {
   :root {
-    --background: 95 0.008 240;
-    --foreground: 20 0.02 250;
-    --card: 100 0 0;
-    --card-foreground: 20 0.02 250;
-    --popover: 100 0 0;
-    --popover-foreground: 20 0.02 250;
-    --primary: 52 0.22 258;
-    --primary-foreground: 100 0 0;
-    --secondary: 92 0.01 240;
-    --secondary-foreground: 20 0.02 250;
-    --muted: 92 0.01 240;
-    --muted-foreground: 55 0.015 250;
-    --accent: 80 0.08 250;
-    --accent-foreground: 20 0.02 250;
-    --destructive: 55 0.22 25;
-    --destructive-foreground: 100 0 0;
-    --border: 88 0.01 250;
-    --input: 88 0.01 250;
-    --ring: 52 0.22 258;
-    --radius: 0.75rem;
-    --chart-1: 52 0.22 258;
-    --chart-2: 70 0.16 180;
-    --chart-3: 65 0.2 150;
-    --chart-4: 72 0.18 30;
-    --chart-5: 60 0.22 295;
-    --sidebar: 95 0.008 240;
-    --sidebar-foreground: 20 0.02 250;
-    --sidebar-primary: 52 0.22 258;
-    --sidebar-primary-foreground: 100 0 0;
-    --sidebar-accent: 88 0.015 250;
-    --sidebar-accent-foreground: 20 0.02 250;
-    --sidebar-border: 88 0.01 250;
-    --sidebar-ring: 52 0.22 258;
-
-    /* Lab card colors */
-    --lab-chemical: 62 0.2 25;
-    --lab-ftir: 68 0.18 240;
-    --lab-contact-angle: 60 0.2 295;
-    --lab-lyo: 72 0.18 168;
-    --lab-sonicator: 65 0.2 50;
-    --lab-zeta: 65 0.18 165;
-    --lab-dark: 28 0.008 250;
+    --background: 0.97 0.007 240;
+    --foreground: 0.18 0.015 255;
+    --card: 1 0 0;
+    --card-foreground: 0.18 0.015 255;
+    --popover: 1 0 0;
+    --popover-foreground: 0.18 0.015 255;
+    --primary: 0.45 0.14 40;
+    --primary-foreground: 1 0 0;
+    --secondary: 0.94 0.012 240;
+    --secondary-foreground: 0.35 0.02 255;
+    --muted: 0.95 0.01 240;
+    --muted-foreground: 0.55 0.02 255;
+    --accent: 0.93 0.04 255;
+    --accent-foreground: 0.35 0.12 255;
+    --destructive: 0.45 0.2 25;
+    --destructive-foreground: 1 0 0;
+    --success: 0.53 0.18 145;
+    --success-foreground: 1 0 0;
+    --warning: 0.75 0.18 75;
+    --warning-foreground: 0.2 0.05 60;
+    --border: 0.9 0.015 240;
+    --input: 0.9 0.015 240;
+    --ring: 0.52 0.19 255;
+    --chart-1: 0.52 0.19 255;
+    --chart-2: 0.53 0.18 145;
+    --chart-3: 0.45 0.2 25;
+    --chart-4: 0.75 0.18 75;
+    --chart-5: 0.6 0.15 290;
+    --radius: 0.5rem;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
-    font-family: "Figtree", sans-serif;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    -webkit-text-size-adjust: 100%;
   }
+
+  html {
+    color-scheme: light;
+  }
+}
+
+@layer utilities {
+  .text-success {
+    color: oklch(var(--success));
+  }
+  .bg-success {
+    background-color: oklch(var(--success));
+  }
+  .text-success-foreground {
+    color: oklch(var(--success-foreground));
+  }
+  .border-success {
+    border-color: oklch(var(--success));
+  }
+  .text-warning {
+    color: oklch(var(--warning));
+  }
+}
+
+@keyframes amber-pulse {
+  0%,
+  100% {
+    text-shadow: 0 0 8px oklch(0.85 0.18 255 / 0.6), 0 0 16px
+      oklch(0.75 0.15 240 / 0.4);
+    opacity: 1;
+  }
+  50% {
+    text-shadow: 0 0 18px oklch(0.85 0.22 255 / 0.9), 0 0 32px
+      oklch(0.75 0.18 240 / 0.7);
+    opacity: 0.9;
+  }
+}
+
+.animate-amber-pulse {
+  animation: amber-pulse 2.5s ease-in-out infinite;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: oklch(0.8 0.01 240);
+  border-radius: 3px;
 }

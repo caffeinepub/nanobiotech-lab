@@ -10,7 +10,55 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface _SERVICE {}
+export interface IssueRecord {
+  'id' : bigint,
+  'enrollmentNo' : string,
+  'studentId' : bigint,
+  'studentName' : string,
+  'dateOfIssue' : Time,
+  'mobileNo' : string,
+  'dateOfReturn' : [] | [Time],
+  'isReturned' : boolean,
+  'quantity' : bigint,
+  'department' : string,
+  'materialName' : string,
+  'remarks' : string,
+}
+export type Time = bigint;
+export interface UserProfile { 'name' : string }
+export type UserRole = { 'admin' : null } |
+  { 'user' : null } |
+  { 'guest' : null };
+export interface _SERVICE {
+  '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'checkNOCEligibility' : ActorMethod<[string], boolean>,
+  'createIssueRecord' : ActorMethod<
+    [string, string, string, string, string, bigint, string],
+    bigint
+  >,
+  'deleteRecord' : ActorMethod<[bigint], undefined>,
+  'getAllIssueRecords' : ActorMethod<[], Array<IssueRecord>>,
+  'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
+  'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getIssueRecordById' : ActorMethod<[bigint], [] | [IssueRecord]>,
+  'getPendingIssues' : ActorMethod<[], Array<IssueRecord>>,
+  'getRecordsForStudent' : ActorMethod<[string], Array<IssueRecord>>,
+  'getStats' : ActorMethod<
+    [],
+    {
+      'totalReturned' : bigint,
+      'totalIssued' : bigint,
+      'totalPending' : bigint,
+    }
+  >,
+  'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'hasPendingIssues' : ActorMethod<[string], boolean>,
+  'isCallerAdmin' : ActorMethod<[], boolean>,
+  'markAsReturned' : ActorMethod<[bigint, string], undefined>,
+  'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+  'searchRecords' : ActorMethod<[string], Array<IssueRecord>>,
+}
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];
 export declare const idlFactory: IDL.InterfaceFactory;

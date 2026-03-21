@@ -8,10 +8,142 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const idlService = IDL.Service({});
+export const UserRole = IDL.Variant({
+  'admin' : IDL.Null,
+  'user' : IDL.Null,
+  'guest' : IDL.Null,
+});
+export const Time = IDL.Int;
+export const IssueRecord = IDL.Record({
+  'id' : IDL.Nat,
+  'enrollmentNo' : IDL.Text,
+  'studentId' : IDL.Nat,
+  'studentName' : IDL.Text,
+  'dateOfIssue' : Time,
+  'mobileNo' : IDL.Text,
+  'dateOfReturn' : IDL.Opt(Time),
+  'isReturned' : IDL.Bool,
+  'quantity' : IDL.Nat,
+  'department' : IDL.Text,
+  'materialName' : IDL.Text,
+  'remarks' : IDL.Text,
+});
+export const UserProfile = IDL.Record({ 'name' : IDL.Text });
+
+export const idlService = IDL.Service({
+  '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'checkNOCEligibility' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
+  'createIssueRecord' : IDL.Func(
+      [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Nat, IDL.Text],
+      [IDL.Nat],
+      [],
+    ),
+  'deleteRecord' : IDL.Func([IDL.Nat], [], []),
+  'getAllIssueRecords' : IDL.Func([], [IDL.Vec(IssueRecord)], ['query']),
+  'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+  'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getIssueRecordById' : IDL.Func([IDL.Nat], [IDL.Opt(IssueRecord)], ['query']),
+  'getPendingIssues' : IDL.Func([], [IDL.Vec(IssueRecord)], ['query']),
+  'getRecordsForStudent' : IDL.Func(
+      [IDL.Text],
+      [IDL.Vec(IssueRecord)],
+      ['query'],
+    ),
+  'getStats' : IDL.Func(
+      [],
+      [
+        IDL.Record({
+          'totalReturned' : IDL.Nat,
+          'totalIssued' : IDL.Nat,
+          'totalPending' : IDL.Nat,
+        }),
+      ],
+      ['query'],
+    ),
+  'getUserProfile' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Opt(UserProfile)],
+      ['query'],
+    ),
+  'hasPendingIssues' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
+  'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'markAsReturned' : IDL.Func([IDL.Nat, IDL.Text], [], []),
+  'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  'searchRecords' : IDL.Func([IDL.Text], [IDL.Vec(IssueRecord)], ['query']),
+});
 
 export const idlInitArgs = [];
 
-export const idlFactory = ({ IDL }) => { return IDL.Service({}); };
+export const idlFactory = ({ IDL }) => {
+  const UserRole = IDL.Variant({
+    'admin' : IDL.Null,
+    'user' : IDL.Null,
+    'guest' : IDL.Null,
+  });
+  const Time = IDL.Int;
+  const IssueRecord = IDL.Record({
+    'id' : IDL.Nat,
+    'enrollmentNo' : IDL.Text,
+    'studentId' : IDL.Nat,
+    'studentName' : IDL.Text,
+    'dateOfIssue' : Time,
+    'mobileNo' : IDL.Text,
+    'dateOfReturn' : IDL.Opt(Time),
+    'isReturned' : IDL.Bool,
+    'quantity' : IDL.Nat,
+    'department' : IDL.Text,
+    'materialName' : IDL.Text,
+    'remarks' : IDL.Text,
+  });
+  const UserProfile = IDL.Record({ 'name' : IDL.Text });
+  
+  return IDL.Service({
+    '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'checkNOCEligibility' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
+    'createIssueRecord' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Nat, IDL.Text],
+        [IDL.Nat],
+        [],
+      ),
+    'deleteRecord' : IDL.Func([IDL.Nat], [], []),
+    'getAllIssueRecords' : IDL.Func([], [IDL.Vec(IssueRecord)], ['query']),
+    'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+    'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getIssueRecordById' : IDL.Func(
+        [IDL.Nat],
+        [IDL.Opt(IssueRecord)],
+        ['query'],
+      ),
+    'getPendingIssues' : IDL.Func([], [IDL.Vec(IssueRecord)], ['query']),
+    'getRecordsForStudent' : IDL.Func(
+        [IDL.Text],
+        [IDL.Vec(IssueRecord)],
+        ['query'],
+      ),
+    'getStats' : IDL.Func(
+        [],
+        [
+          IDL.Record({
+            'totalReturned' : IDL.Nat,
+            'totalIssued' : IDL.Nat,
+            'totalPending' : IDL.Nat,
+          }),
+        ],
+        ['query'],
+      ),
+    'getUserProfile' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(UserProfile)],
+        ['query'],
+      ),
+    'hasPendingIssues' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
+    'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'markAsReturned' : IDL.Func([IDL.Nat, IDL.Text], [], []),
+    'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+    'searchRecords' : IDL.Func([IDL.Text], [IDL.Vec(IssueRecord)], ['query']),
+  });
+};
 
 export const init = ({ IDL }) => { return []; };
