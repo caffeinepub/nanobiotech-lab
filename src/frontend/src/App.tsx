@@ -25,7 +25,7 @@ import {
   Wrench,
   X,
 } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import { useState } from "react";
 
 type Department = "SBSR" | "Other" | null;
@@ -114,9 +114,7 @@ export default function App() {
   const [instrumentModal, setInstrumentModal] = useState<
     (typeof INSTRUMENTS)[0] | null
   >(null);
-  const [instrumentSubModal, setInstrumentSubModal] = useState<"info" | null>(
-    null,
-  );
+  const [showInstrumentInfo, setShowInstrumentInfo] = useState(false);
   const [projectModal, setProjectModal] = useState<(typeof PROJECTS)[0] | null>(
     null,
   );
@@ -127,6 +125,16 @@ export default function App() {
   const selectDepartment = (dept: Department) => {
     setDepartment(dept);
     setShowDeptPopup(false);
+  };
+
+  const openInstrumentModal = (inst: (typeof INSTRUMENTS)[0]) => {
+    setShowInstrumentInfo(false);
+    setInstrumentModal(inst);
+  };
+
+  const closeInstrumentModal = () => {
+    setInstrumentModal(null);
+    setShowInstrumentInfo(false);
   };
 
   const navItems: { id: Section; label: string; icon: React.ReactNode }[] = [
@@ -185,26 +193,20 @@ export default function App() {
       <header className="sticky top-0 z-40 bg-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-4">
           <img
-            src="/assets/uploads/NBL-logo-1-1.png"
-            alt="NBL Logo"
-            className="w-14 h-14 object-contain flex-shrink-0"
+            src="/assets/uploads/NBL-logo-2-2.png"
+            alt="Nanobiotechnology Laboratory Logo"
+            className="h-20 w-20 object-contain flex-shrink-0"
           />
-          <div className="flex flex-col items-center gap-1 flex-1">
-            <img
-              src="/assets/uploads/NBL-logo-1-1.png"
-              alt="NBL Center Logo"
-              className="w-44 h-44 object-contain hidden sm:block"
-              style={{ maxHeight: 180 }}
-            />
-            <span className="font-bold text-sm text-center text-gray-700 hidden sm:block">
+          <div className="flex-1 text-center hidden sm:block">
+            <span className="font-bold text-sm text-gray-700">
               Nanobiotech Lab | MIT-ADT University, Pune
             </span>
           </div>
-          <div className="flex flex-col items-end gap-2 flex-shrink-0">
+          <div className="flex flex-col items-end gap-1 flex-shrink-0">
             <img
-              src="/assets/uploads/mitbio_logo.png-1.png"
+              src="/assets/uploads/LOGO-Bio-1.png"
               alt="MIT-ADTU Bioengineering"
-              className="w-14 h-14 object-contain"
+              className="h-20 w-20 object-contain"
             />
             {department && (
               <button
@@ -226,8 +228,6 @@ export default function App() {
             )}
           </div>
         </div>
-
-        {/* Navigation */}
         <nav className="bg-gray-800 overflow-x-auto">
           <ul className="flex min-w-max">
             {navItems.map((item) => (
@@ -266,15 +266,22 @@ export default function App() {
                 "linear-gradient(160deg, #1a3d8f 0%, #2563eb 50%, #eff6ff 100%)",
             }}
           >
-            {/* Watermark */}
             <img
-              src="/assets/uploads/NBL-logo-1-1.png"
+              src="/assets/uploads/IMG_20260322_092930-1.png"
               alt=""
               aria-hidden
               className="pointer-events-none select-none absolute inset-0 m-auto w-80 h-80 object-contain"
               style={{ opacity: 0.06 }}
             />
-
+            <motion.img
+              src="/assets/uploads/IMG_20260322_092930-1.png"
+              alt="Nanobiotechnology Laboratory"
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="relative z-10 object-contain mb-4"
+              style={{ height: 180, width: 180 }}
+            />
             <motion.h1
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -282,29 +289,25 @@ export default function App() {
             >
               Welcome to Nanobiotech Lab
             </motion.h1>
-
-            {/* Bold animated note */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
               className="relative z-10 mb-10 text-center max-w-2xl"
             >
-              <p className="text-blue-100 font-bold text-base md:text-lg leading-relaxed animate-amber-pulse">
+              <p className="text-blue-100 font-bold text-base md:text-lg leading-relaxed">
                 Note:- If you wish to book a slot for instrument usage, please
                 click on the{" "}
                 <span className="text-white">&ldquo;Services&rdquo;</span>{" "}
                 option.
               </p>
-              <p className="text-blue-100 font-bold text-base md:text-lg leading-relaxed mt-2 animate-amber-pulse">
+              <p className="text-blue-100 font-bold text-base md:text-lg leading-relaxed mt-2">
                 For internal use only: If you need to issue chemicals,
                 glassware, or plasticware (consumables), please click on the{" "}
                 <span className="text-white">&ldquo;Logistics&rdquo;</span>{" "}
                 option.
               </p>
             </motion.div>
-
-            {/* Nav Cards Grid */}
             <div className="relative z-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 w-full max-w-3xl">
               {[
                 {
@@ -338,12 +341,6 @@ export default function App() {
                   icon: <Package size={28} />,
                 },
                 {
-                  label: "Contact",
-                  color: "#6b1a1a",
-                  icon: <Phone size={28} />,
-                  action: () => setContactModal(true),
-                },
-                {
                   id: "about" as Section,
                   label: "Lab SOP",
                   color: "#1a5a6b",
@@ -351,11 +348,10 @@ export default function App() {
                   action: () => setLabSopOpen(true),
                 },
                 {
-                  id: "projects" as Section,
-                  label: "Research",
-                  color: "#4a1a6b",
-                  icon: <Microscope size={28} />,
-                  action: undefined,
+                  label: "Contact",
+                  color: "#6b1a1a",
+                  icon: <Phone size={28} />,
+                  action: () => setContactModal(true),
                 },
               ].map((card, i) => (
                 <motion.button
@@ -399,8 +395,6 @@ export default function App() {
               <span className="font-semibold text-gray-700">About</span>
             </div>
             <h2 className="text-2xl font-bold mb-6">About</h2>
-
-            {/* Laboratory Details Accordion */}
             <div className="border rounded-xl mb-4 overflow-hidden shadow-sm">
               <button
                 type="button"
@@ -415,28 +409,28 @@ export default function App() {
                   <ChevronDown size={18} />
                 )}
               </button>
-              <AnimatePresence>
-                {aboutOpen === "lab" && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="p-4">
-                      <img
-                        src="/assets/uploads/Laboratory-details-1.png"
-                        alt="Laboratory Details"
-                        className="w-full rounded-lg"
-                      />
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {aboutOpen === "lab" && (
+                <div className="p-4">
+                  <div className="flex justify-end mb-2">
+                    <a
+                      href="/assets/uploads/Lab-details-1--1.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-sm text-blue-600 hover:underline"
+                      data-ocid="about.lab_details_open_link"
+                    >
+                      <ExternalLink size={14} /> Open PDF
+                    </a>
+                  </div>
+                  <iframe
+                    src="/assets/uploads/Lab-details-1--1.pdf"
+                    className="w-full rounded-lg border"
+                    style={{ height: 500 }}
+                    title="Laboratory Details"
+                  />
+                </div>
+              )}
             </div>
-
-            {/* Course Work Accordion */}
             <div className="border rounded-xl overflow-hidden shadow-sm">
               <button
                 type="button"
@@ -453,25 +447,15 @@ export default function App() {
                   <ChevronDown size={18} />
                 )}
               </button>
-              <AnimatePresence>
-                {aboutOpen === "course" && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="p-4">
-                      <img
-                        src="/assets/uploads/courcework-6.png"
-                        alt="Course Work"
-                        className="w-full rounded-lg"
-                      />
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {aboutOpen === "course" && (
+                <div className="p-4">
+                  <img
+                    src="/assets/uploads/Nano-Course-brief-2.gif"
+                    alt="Course Work - Nanobiotechnology BT603"
+                    className="w-full rounded-lg"
+                  />
+                </div>
+              )}
             </div>
           </section>
         )}
@@ -494,26 +478,29 @@ export default function App() {
             <h2 className="text-2xl font-bold mb-6">Student Projects</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {PROJECTS.map((proj, i) => (
-                <motion.div
+                <motion.button
                   key={proj.id}
+                  type="button"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 * i }}
-                  className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow text-left w-full"
                   onClick={() => setProjectModal(proj)}
                   data-ocid={`projects.item.${i + 1}`}
                 >
                   <img
                     src={proj.img}
                     alt={proj.title}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-48 object-cover pointer-events-none"
                   />
                   <div className="p-4">
                     <p className="font-semibold text-sm text-gray-800 leading-snug">
                       {proj.title}
                     </p>
                   </div>
-                </motion.div>
+                </motion.button>
               ))}
             </div>
           </section>
@@ -570,7 +557,7 @@ export default function App() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.08 * i }}
                   whileHover={{ scale: 1.04 }}
-                  onClick={() => setInstrumentModal(inst)}
+                  onClick={() => openInstrumentModal(inst)}
                   className="flex flex-col items-center justify-center gap-3 p-5 rounded-xl text-white font-semibold shadow-md aspect-square text-sm"
                   style={{ background: inst.color }}
                   data-ocid={`services.${inst.id}_button`}
@@ -612,7 +599,6 @@ export default function App() {
               <span className="font-semibold text-gray-700">Logistics</span>
             </div>
             <h2 className="text-2xl font-bold mb-6">Logistics</h2>
-
             {department === "Other" ? (
               <div
                 className="bg-gray-100 rounded-xl p-10 text-center text-gray-500 font-medium"
@@ -622,7 +608,6 @@ export default function App() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {/* Chemicals */}
                 <motion.a
                   href="https://docs.google.com/spreadsheets/d/127aRtlugmYL_1h5886KKk3BjuySBllQGEdZDYIlu9p0/edit?usp=sharing"
                   target="_blank"
@@ -637,8 +622,6 @@ export default function App() {
                   <FlaskConical size={40} />
                   Chemicals
                 </motion.a>
-
-                {/* Glassware & Plasticware (consumables) */}
                 <motion.a
                   href="https://lab-issue-return-manager-8mw.caffeine.xyz"
                   target="_blank"
@@ -674,229 +657,218 @@ export default function App() {
       </footer>
 
       {/* Instrument Modal */}
-      <AnimatePresence>
-        {instrumentModal && (
-          <Dialog
-            open
-            onOpenChange={() => {
-              setInstrumentModal(null);
-              setInstrumentSubModal(null);
-            }}
+      {instrumentModal && (
+        <Dialog open={true} onOpenChange={closeInstrumentModal}>
+          <DialogContent
+            className="max-w-lg w-full"
+            data-ocid="services.instrument_modal"
           >
-            <DialogContent
-              className="max-w-md"
-              data-ocid="services.instrument_modal"
-            >
-              <DialogHeader>
-                <DialogTitle>{instrumentModal.name}</DialogTitle>
-              </DialogHeader>
-              <div className="grid grid-cols-1 gap-3 mt-2">
-                {/* Booking */}
-                <a
-                  href={instrumentModal.booking}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-4 rounded-lg text-white font-semibold shadow"
-                  style={{ background: instrumentModal.color }}
-                  data-ocid="services.booking_button"
-                >
-                  <BookOpen size={20} />
-                  Instrument Booking
-                  <ExternalLink size={14} className="ml-auto opacity-70" />
-                </a>
+            <DialogHeader>
+              <DialogTitle>{instrumentModal.name}</DialogTitle>
+            </DialogHeader>
+            <div className="grid grid-cols-1 gap-3 mt-2">
+              {/* Booking */}
+              <a
+                href={instrumentModal.booking}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-4 rounded-lg text-white font-semibold shadow"
+                style={{ background: instrumentModal.color }}
+                data-ocid="services.booking_button"
+              >
+                <BookOpen size={20} />
+                Instrument Booking
+                <ExternalLink size={14} className="ml-auto opacity-70" />
+              </a>
 
-                {/* Instrument Information */}
-                {instrumentModal.info ? (
+              {/* Instrument Information */}
+              {instrumentModal.info ? (
+                <div className="border rounded-lg overflow-hidden">
                   <button
                     type="button"
-                    onClick={() => setInstrumentSubModal("info")}
-                    className="flex items-center gap-3 p-4 rounded-lg font-semibold shadow border hover:bg-gray-50"
+                    onClick={() => setShowInstrumentInfo(!showInstrumentInfo)}
+                    className="w-full flex items-center gap-3 p-4 font-semibold hover:bg-gray-50"
                     data-ocid="services.info_button"
                   >
                     <Info size={20} className="text-blue-600" />
                     Instrument Information
-                    <ChevronDown size={14} className="ml-auto text-gray-400" />
+                    {showInstrumentInfo ? (
+                      <ChevronUp size={14} className="ml-auto text-gray-400" />
+                    ) : (
+                      <ChevronDown
+                        size={14}
+                        className="ml-auto text-gray-400"
+                      />
+                    )}
                   </button>
-                ) : (
-                  <div className="flex items-center gap-3 p-4 rounded-lg font-semibold border bg-gray-50 text-gray-400">
-                    <Info size={20} />
-                    Instrument Information — Coming soon
-                  </div>
-                )}
+                  {showInstrumentInfo && (
+                    <div className="px-4 pb-4 pt-1">
+                      <img
+                        src={instrumentModal.info}
+                        alt={`${instrumentModal.name} information`}
+                        className="w-full rounded-lg border"
+                        style={{
+                          display: "block",
+                          maxHeight: "60vh",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 p-4 rounded-lg font-semibold border bg-gray-50 text-gray-400">
+                  <Info size={20} />
+                  Instrument Information — Coming soon
+                </div>
+              )}
 
-                {/* SOP */}
-                {instrumentModal.sop ? (
-                  <a
-                    href={instrumentModal.sop}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-4 rounded-lg font-semibold shadow border hover:bg-gray-50"
-                    data-ocid="services.sop_link"
-                  >
-                    <BookMarked size={20} className="text-green-600" />
-                    Instrument SOP
-                    <ExternalLink size={14} className="ml-auto text-gray-400" />
-                  </a>
-                ) : (
-                  <div className="flex items-center gap-3 p-4 rounded-lg font-semibold border bg-gray-50 text-gray-400">
-                    <BookMarked size={20} />
-                    Instrument SOP — Coming soon
-                  </div>
-                )}
-              </div>
-            </DialogContent>
-          </Dialog>
-        )}
-      </AnimatePresence>
-
-      {/* Instrument Info Image Modal */}
-      <AnimatePresence>
-        {instrumentSubModal === "info" && instrumentModal?.info && (
-          <Dialog open onOpenChange={() => setInstrumentSubModal(null)}>
-            <DialogContent
-              className="max-w-2xl"
-              data-ocid="services.info_modal"
-            >
-              <DialogHeader>
-                <DialogTitle>{instrumentModal.name} — Information</DialogTitle>
-              </DialogHeader>
-              <img
-                src={instrumentModal.info}
-                alt={`${instrumentModal.name} information`}
-                className="w-full rounded-lg mt-2"
-              />
-            </DialogContent>
-          </Dialog>
-        )}
-      </AnimatePresence>
-
-      {/* Lab SOP Modal */}
-      <AnimatePresence>
-        {labSopOpen && (
-          <Dialog open onOpenChange={() => setLabSopOpen(false)}>
-            <DialogContent
-              className="max-w-4xl w-full"
-              data-ocid="services.lab_sop_modal"
-            >
-              <DialogHeader>
-                <DialogTitle>Lab SOP</DialogTitle>
-              </DialogHeader>
-              <div className="flex justify-end mb-2">
+              {/* SOP */}
+              {instrumentModal.sop ? (
                 <a
-                  href="https://docs.google.com/document/d/1U3EDIqQfNZA8dJDbmBNUE9Kp-2MpD7zpru9m6lhyIE8/edit?usp=sharing"
+                  href={instrumentModal.sop}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-sm text-blue-600 hover:underline"
-                  data-ocid="services.sop_open_link"
+                  className="flex items-center gap-3 p-4 rounded-lg font-semibold shadow border hover:bg-gray-50"
+                  data-ocid="services.sop_link"
                 >
-                  <ExternalLink size={14} /> Open in Google Docs
+                  <BookMarked size={20} className="text-green-600" />
+                  Instrument SOP
+                  <ExternalLink size={14} className="ml-auto text-gray-400" />
                 </a>
-              </div>
-              <iframe
-                src="https://docs.google.com/document/d/1U3EDIqQfNZA8dJDbmBNUE9Kp-2MpD7zpru9m6lhyIE8/preview"
-                className="w-full rounded-lg border"
-                style={{ height: 500 }}
-                title="Lab SOP"
-              />
-            </DialogContent>
-          </Dialog>
-        )}
-      </AnimatePresence>
+              ) : (
+                <div className="flex items-center gap-3 p-4 rounded-lg font-semibold border bg-gray-50 text-gray-400">
+                  <BookMarked size={20} />
+                  Instrument SOP — Coming soon
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
 
-      {/* Project Modal */}
-      <AnimatePresence>
-        {projectModal && (
-          <Dialog open onOpenChange={() => setProjectModal(null)}>
-            <DialogContent
-              className="max-w-2xl"
-              data-ocid="projects.detail_modal"
-            >
-              <DialogHeader>
-                <DialogTitle className="text-base leading-snug">
-                  {projectModal.title}
-                </DialogTitle>
-              </DialogHeader>
-              <img
-                src={projectModal.img}
-                alt={projectModal.title}
-                className="w-full rounded-lg mt-2"
-              />
-            </DialogContent>
-          </Dialog>
-        )}
-      </AnimatePresence>
+      {/* Lab SOP Modal */}
+      {labSopOpen && (
+        <Dialog open={true} onOpenChange={() => setLabSopOpen(false)}>
+          <DialogContent
+            className="max-w-4xl w-full"
+            data-ocid="services.lab_sop_modal"
+          >
+            <DialogHeader>
+              <DialogTitle>Lab SOP</DialogTitle>
+            </DialogHeader>
+            <div className="flex justify-end mb-2">
+              <a
+                href="https://docs.google.com/document/d/1U3EDIqQfNZA8dJDbmBNUE9Kp-2MpD7zpru9m6lhyIE8/edit?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-sm text-blue-600 hover:underline"
+                data-ocid="services.sop_open_link"
+              >
+                <ExternalLink size={14} /> Open in Google Docs
+              </a>
+            </div>
+            <iframe
+              src="https://docs.google.com/document/d/1U3EDIqQfNZA8dJDbmBNUE9Kp-2MpD7zpru9m6lhyIE8/preview"
+              className="w-full rounded-lg border"
+              style={{ height: 500 }}
+              title="Lab SOP"
+            />
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Project Modal — full image viewer */}
+      {projectModal && (
+        <Dialog open={true} onOpenChange={() => setProjectModal(null)}>
+          <DialogContent
+            className="max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            data-ocid="projects.detail_modal"
+          >
+            <DialogHeader>
+              <DialogTitle className="text-base leading-snug">
+                {projectModal.title}
+              </DialogTitle>
+            </DialogHeader>
+            <img
+              src={projectModal.img}
+              alt={projectModal.title}
+              className="w-full rounded-lg mt-2"
+              style={{ display: "block" }}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
 
       {/* Contact Modal */}
-      <AnimatePresence>
-        {contactModal && (
-          <Dialog open onOpenChange={() => setContactModal(false)}>
-            <DialogContent className="max-w-sm" data-ocid="contact.dialog">
-              <DialogHeader>
-                <DialogTitle>Contact Us</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4 mt-2">
-                <div className="flex items-start gap-3">
-                  <Phone
-                    size={18}
-                    className="text-blue-600 mt-0.5 flex-shrink-0"
-                  />
-                  <div>
-                    <p className="font-semibold text-sm text-gray-700 mb-0.5">
-                      Phone
-                    </p>
-                    <p className="text-sm text-gray-600">9284234954</p>
-                    <p className="text-sm text-gray-600">9833691660</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Mail
-                    size={18}
-                    className="text-green-600 mt-0.5 flex-shrink-0"
-                  />
-                  <div>
-                    <p className="font-semibold text-sm text-gray-700 mb-0.5">
-                      Email
-                    </p>
-                    <p className="text-sm text-gray-600 break-all">
-                      nanobiotechlabmitbio@gmail.com
-                    </p>
-                    <p className="text-sm text-gray-600 break-all">
-                      pradip.ivare@mituniversity.edu.in
-                    </p>
-                    <p className="text-sm text-gray-600 break-all">
-                      preetam.bala@mituniversity.edu.in
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <MapPin
-                    size={18}
-                    className="text-red-500 mt-0.5 flex-shrink-0"
-                  />
-                  <div>
-                    <p className="font-semibold text-sm text-gray-700 mb-0.5">
-                      Address
-                    </p>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      Nanobiotech Lab, 3rd Floor, School of Bioengineering
-                      Science &amp; Research, MIT-ADT University, Loni Kalbhor,
-                      Pune-412201
-                    </p>
-                  </div>
+      {contactModal && (
+        <Dialog open={true} onOpenChange={() => setContactModal(false)}>
+          <DialogContent className="max-w-sm" data-ocid="contact.dialog">
+            <DialogHeader>
+              <DialogTitle>Contact Us</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 mt-2">
+              <div className="flex items-start gap-3">
+                <Phone
+                  size={18}
+                  className="text-blue-600 mt-0.5 flex-shrink-0"
+                />
+                <div>
+                  <p className="font-semibold text-sm text-gray-700 mb-0.5">
+                    Phone
+                  </p>
+                  <p className="text-sm text-gray-600">9284234954</p>
+                  <p className="text-sm text-gray-600">9833691660</p>
                 </div>
               </div>
-              <Button
-                className="mt-4 w-full"
-                variant="outline"
-                onClick={() => setContactModal(false)}
-                data-ocid="contact.close_button"
-              >
-                <X size={14} className="mr-1" /> Close
-              </Button>
-            </DialogContent>
-          </Dialog>
-        )}
-      </AnimatePresence>
+              <div className="flex items-start gap-3">
+                <Mail
+                  size={18}
+                  className="text-green-600 mt-0.5 flex-shrink-0"
+                />
+                <div>
+                  <p className="font-semibold text-sm text-gray-700 mb-0.5">
+                    Email
+                  </p>
+                  <p className="text-sm text-gray-600 break-all">
+                    nanobiotechlabmitbio@gmail.com
+                  </p>
+                  <p className="text-sm text-gray-600 break-all">
+                    pradip.ivare@mituniversity.edu.in
+                  </p>
+                  <p className="text-sm text-gray-600 break-all">
+                    preetam.bala@mituniversity.edu.in
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <MapPin
+                  size={18}
+                  className="text-red-500 mt-0.5 flex-shrink-0"
+                />
+                <div>
+                  <p className="font-semibold text-sm text-gray-700 mb-0.5">
+                    Address
+                  </p>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Nanobiotech Lab, 3rd Floor, School of Bioengineering Science
+                    &amp; Research, MIT-ADT University, Loni Kalbhor,
+                    Pune-412201
+                  </p>
+                </div>
+              </div>
+            </div>
+            <Button
+              className="mt-4 w-full"
+              variant="outline"
+              onClick={() => setContactModal(false)}
+              data-ocid="contact.close_button"
+            >
+              <X size={14} className="mr-1" /> Close
+            </Button>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
